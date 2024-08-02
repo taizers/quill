@@ -35,3 +35,15 @@ export const formats = [
     'list', 'bullet', 'indent',
     'link', 'image', 'video', 'color'
 ];
+
+export const fonts = [
+    "arial",
+    "comic-sans",
+    "courier-new",
+    "georgia",
+    "helvetica",
+    "roboto",
+    "sans-serif"
+];
+
+export const fontSizes = ['10px', '12px', '14px', '16px', '18px', '20px'];

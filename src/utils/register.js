@@ -1,15 +1,6 @@
-const fonts = [
-    "arial",
-    "comic-sans",
-    "courier-new",
-    "georgia",
-    "helvetica",
-    "roboto"
-];
+import { fonts, fontSizes } from "../constants";
 
-const fontSizes = ['10px', '12px', '14px', '16px', '18px', '20px'];
-  
-export const register = (Quill) => {
+  export const register = (Quill) => {
   // Add sizes to whitelist and register them
   const fontSizeStyle = Quill.import('attributors/style/size');
   fontSizeStyle.whitelist = [...fontSizes , false];

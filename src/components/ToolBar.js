@@ -40,9 +40,9 @@ export const CustomToolbar = ({fonts, values}) => (
     </select>
     <select className='ql-font' defaultValue={'default'}>
       {fonts?.map((item, index)=> {
-        const {value} = values.find(valueItem => valueItem.value === item);
+        const {label} = values.find(valueItem => valueItem.value === item);
 
-        return <option key={index} value={item}>{value}</option>
+        return <option key={index} value={item}>{label}</option>
       })}
       <option value='default'>default</option>
     </select>

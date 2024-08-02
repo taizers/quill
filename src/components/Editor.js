@@ -1,4 +1,4 @@
-import React, { useState, useRef, useMemo, useEffect } from 'react';
+import React, { useState, useRef, useMemo, useEffect, useLayoutEffect } from 'react';
 import ReactQuill, {Quill} from 'react-quill';
 import {changeSpecificFonts, changeTextSize, insertStar, cleanPastFormatting} from '../utils/customActions';
 import {register} from '../utils/register';
@@ -9,6 +9,8 @@ import { CustomToolbar } from './ToolBar';
 
 export const Editor = ({fonts}) => {
     const [value, setValue] = useState('');
+    const [val, setVal] = useState(true);
+    const [val2, setVal2] = useState(false);
     const quillRef = useRef();
 
     register(Quill);
@@ -17,7 +19,21 @@ export const Editor = ({fonts}) => {
         setButtonTitle();
     
         // cleanPastFormatting(quillRef);
-      }, []);
+    }, []);
+
+    useLayoutEffect(() => {
+        console.log('1')
+        setVal2(true);
+        setVal(false);
+    }, [fonts]);
+
+    useLayoutEffect(() => {
+        if (val2) {
+            console.log('2')
+            setVal(true);
+            setVal2(false);
+        }
+    }, [val2]);
 
     const modules = useMemo(() => ({
         toolbar: {
@@ -36,19 +52,21 @@ export const Editor = ({fonts}) => {
         },
     }),[]);
 
-    console.log(fonts);
+    // console.log(fonts);
 
     return (
         <>
-            <CustomToolbar fonts={fonts} values={fontsValues} />
-            <ReactQuill
-                ref={quillRef}
-                theme='snow'
-                modules={modules}
-                formats={formats}
-                value={value} 
-                onChange={setValue}
-            />
+            {val && <>
+                <CustomToolbar fonts={fonts} values={fontsValues} />
+                <ReactQuill
+                    ref={quillRef}
+                    theme='snow'
+                    modules={modules}
+                    formats={formats}
+                    value={value} 
+                    onChange={setValue}
+                />
+            </>}
         </>
       )
 };
