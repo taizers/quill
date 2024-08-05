@@ -16,7 +16,7 @@ const ToggleFormattingButton = ({isToggleOpen}) => <span style={{display: 'inlin
 
 export const CustomToolbar = ({fonts, values, isToggleOpen}) => (
   <div id='toolbar'>
-    <select className='ql-size' defaultString={defaultFontSize.value}>
+    <select className='ql-size' defaultValue={defaultFontSize.value}>
       {fontSizes.map(item => <option value={item}>{item}</option>)}
       <option value={defaultFontSize.value}>{defaultFontSize.label}</option>
     </select>
@@ -39,10 +39,10 @@ export const CustomToolbar = ({fonts, values, isToggleOpen}) => (
     </button>
     <button className='ql-clean' />
     <button className='ql-image' />
-    <select className='ql-specificFonts ql-size ' style={{width: '260px'}} defaultString={specificFonts.find(item => item.label === defaultString).value}>
+    <select className='ql-specificFonts ql-size ' style={{width: '260px'}} defaultValue={specificFonts.find(item => item.label === defaultString).value}>
       {specificFonts.map(item => <option value={item.value}>{item.label}</option>)}
     </select>
-    <select className='ql-font' defaultString={defaultFont.value}>
+    <select className='ql-font' defaultValue={defaultFont.value}>
       {fonts?.map((item, index)=> {
         const {label} = values.find(valueItem => valueItem.value === item);
 
