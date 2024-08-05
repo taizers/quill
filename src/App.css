@@ -1,4 +1,4 @@
-html,body{
+html, body{
     height: 100vh;
 };
 
@@ -21,6 +21,9 @@ html,body{
 #toolbar .ql-font span[data-label='roboto']::before {
     font-family: 'Roboto';
 }
+#toolbar .ql-font span[data-label='arila']::before {
+    font-family: 'Arial';
+}
 
   /* Set content font-families */
 .ql-font-courier-new {
@@ -37,4 +40,7 @@ html,body{
 }
 .ql-font-roboto {
     font-family: 'Roboto', sans-serif;
+}
+.ql-font-arial {
+    font-family: 'Arial', sans-serif;
 }

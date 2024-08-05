@@ -1,3 +1,5 @@
+export const defaultString = 'default';
+
 export const fontsValues = [
     {
       label: 'Arial',
@@ -47,3 +49,12 @@ export const fonts = [
 ];
 
 export const fontSizes = ['10px', '12px', '14px', '16px', '18px', '20px'];
+
+export const defaultFontSize = {
+  label: defaultString,
+  value: '14px',
+};
+export const defaultFont = {
+  label: defaultString,
+  value: defaultString,
+};

@@ -1,3 +1,5 @@
+import { defaultString } from "../constants";
+
 const getEditorAndRange = (quill) =>  {
     const editor = quill?.current ? quill?.current?.getEditor() : quill;
     const range = editor?.getSelection();
@@ -5,7 +7,7 @@ const getEditorAndRange = (quill) =>  {
     return {editor, range};
 };
   
-const redEqualFormatting = (quill) => {
+const redSpecificFontFormatting = (quill) => {
     const {editor, range} = getEditorAndRange(quill);
   
     editor.removeFormat(range);
@@ -13,7 +15,7 @@ const redEqualFormatting = (quill) => {
     editor.formatText(range, 'size', '14px');
 };
   
-const boldEqualFormatting = (quill) => {
+const boldSpecificFontFormatting = (quill) => {
     const {editor, range} = getEditorAndRange(quill);
   
     editor.removeFormat(range);
@@ -21,7 +23,7 @@ const boldEqualFormatting = (quill) => {
     editor.formatText(range, 'size', '10px');
 };
   
-const greenEqualFormatting = (quill) => {
+const greenSpecificFontFormatting = (quill) => {
     const {editor, range} = getEditorAndRange(quill);
   
     editor.removeFormat(range);
@@ -31,22 +33,37 @@ const greenEqualFormatting = (quill) => {
     editor.formatText(range, 'font', 'roboto');
 };
   
-const defaultEqualFormatting = (quill) => {
+const defaultSpecificFontFormatting = (quill) => {
     const {editor, range} = getEditorAndRange(quill);
   
     editor.removeFormat(range);
 };
-  
-const equals ={
-    'red': redEqualFormatting,
-    'bold': boldEqualFormatting,
-    'green': greenEqualFormatting,
-    // 'default': defaultEqualFormatting,
-    'false': defaultEqualFormatting,
-};
+
+export const specificFonts = [
+    {
+        value: 'red',
+        label: 'Красный, 14px',
+        function: redSpecificFontFormatting,
+    },
+    {
+        value: 'bold',
+        label: 'Жирный, 10px',
+        function: boldSpecificFontFormatting,
+    },
+    {
+        value: 'green',
+        label: 'Зелёный, наклонный, 12px, Roboto',
+        function: greenSpecificFontFormatting,
+    },
+    {
+        value: 'false',
+        label: defaultString,
+        function: defaultSpecificFontFormatting,
+    },
+];
 
 export function changeSpecificFonts(value) {
-    return equals[value.toString()](this.quill);
+    specificFonts.find(item => item.value === value.toString()).function(this.quill);
 };
 
 export function insertStar() {
@@ -73,11 +90,23 @@ export function changeTextSize() {
     editor.formatText(range, 'size', '20px');
 };
 
-export const cleanPastFormatting = (quill) => {
-    const {editor} = getEditorAndRange(quill);
+export function toggleFormatting (setIsToggleOpen, isToggleOpen, setStoredFormatting, storedFormatting) {
+    const ops = this.quill?.editor?.delta?.ops;
+    
+    if (isToggleOpen) {
+        const newOps = ops?.map(op => ({insert: op.insert}));
 
-    editor?.clipboard.addMatcher(Node.ELEMENT_NODE, (node, delta) => {
-        delta.ops = delta.ops.map(op => ({insert: op.insert}))
-        return delta
-    })
+        setStoredFormatting(ops);
+        this.quill?.setContents({ 'ops': newOps }); 
+    } else {
+        // const newStoredOps = ops.map((item) => {
+        //     const storedItem = storedFormatting.find((findItem) => (findItem.insert === item && findItem.attributes));
+        //     return storedItem || item;
+        // });
+
+        this.quill?.setContents({ 'ops': storedFormatting }); 
+        setStoredFormatting(null);
+    }
+
+    setIsToggleOpen(!isToggleOpen);
 };

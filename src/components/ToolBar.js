@@ -1,17 +1,24 @@
-import {StarFillIcon, LogIcon } from '@primer/octicons-react';
+import { StarFillIcon, LogIcon, EyeIcon, EyeClosedIcon } from '@primer/octicons-react';
+import { defaultFont, defaultFontSize, defaultString, fontSizes } from '../constants';
+import { specificFonts } from '../utils/customActions';
 
-const CustomButton = () => <span style={{display: 'inline-block', height: '100%'}}><StarFillIcon  size={13}/></span>;
-const CustomChangeSizeButton = () => <span style={{display: 'inline-block', height: '100%'}}><LogIcon   size={13}/></span>;
+const CustomButton = () => <span style={{display: 'inline-block', height: '100%'}}>
+    <StarFillIcon size={13}/>
+  </span>;
 
-export const CustomToolbar = ({fonts, values}) => (
+const CustomChangeSizeButton = () => <span style={{display: 'inline-block', height: '100%'}}>
+    <LogIcon size={13}/>
+  </span>;
+
+const ToggleFormattingButton = ({isToggleOpen}) => <span style={{display: 'inline-block', height: '100%'}}>
+    { isToggleOpen ? <EyeIcon   size={13}/> : <EyeClosedIcon   size={13}/> }
+  </span>;
+
+export const CustomToolbar = ({fonts, values, isToggleOpen}) => (
   <div id='toolbar'>
-    <select className='ql-size' defaultValue={'14px'}>
-      <option value='10px'>10px</option>
-      <option value='12px'>12px</option>
-      <option value='14px'>14px</option>
-      <option value='16px'>16px</option>
-      <option value='20px'>20px</option>
-      <option value='14px'>default</option>
+    <select className='ql-size' defaultString={defaultFontSize.value}>
+      {fontSizes.map(item => <option value={item}>{item}</option>)}
+      <option value={defaultFontSize.value}>{defaultFontSize.label}</option>
     </select>
     <button className='ql-bold' />
     <button className='ql-italic' />
@@ -32,19 +39,19 @@ export const CustomToolbar = ({fonts, values}) => (
     </button>
     <button className='ql-clean' />
     <button className='ql-image' />
-    <select className='ql-specificFonts ql-size ' style={{width: '260px'}} defaultValue={'default'}>
-      <option value='red'>Красный, 14px</option>
-      <option value='bold'>Жирный, 10px</option>
-      <option value='green'>Зелёный, наклонный, 12px, Roboto</option>
-      <option value='default' selected>default</option>
+    <select className='ql-specificFonts ql-size ' style={{width: '260px'}} defaultString={specificFonts.find(item => item.label === defaultString).value}>
+      {specificFonts.map(item => <option value={item.value}>{item.label}</option>)}
     </select>
-    <select className='ql-font' defaultValue={'default'}>
+    <select className='ql-font' defaultString={defaultFont.value}>
       {fonts?.map((item, index)=> {
         const {label} = values.find(valueItem => valueItem.value === item);
 
         return <option key={index} value={item}>{label}</option>
       })}
-      <option value='default'>default</option>
+      <option value={defaultFont.value}>{defaultFont.label}</option>
     </select>
+    <button className='ql-showHideFormatting'>
+      <ToggleFormattingButton isToggleOpen={isToggleOpen} />
+    </button>
   </div>
 );

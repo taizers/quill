@@ -1,39 +1,37 @@
-import React, { useState, useRef, useMemo, useEffect, useLayoutEffect } from 'react';
-import ReactQuill, {Quill} from 'react-quill';
-import {changeSpecificFonts, changeTextSize, insertStar, cleanPastFormatting} from '../utils/customActions';
-import {register} from '../utils/register';
-import {setButtonTitle} from '../utils/toolbarButtonsTitle';
-import {bindings} from '../utils/bindButtons';
+import React, { useState, useRef, useMemo, useLayoutEffect } from 'react';
+import ReactQuill, { Quill } from 'react-quill';
+import { changeSpecificFonts, changeTextSize, insertStar, toggleFormatting } from '../utils/customActions';
+import { register} from '../utils/register';
+import { setButtonTitle } from '../utils/toolbarButtonsTitle';
+import { bindings } from '../utils/bindButtons';
 import { fontsValues, formats } from '../constants';
 import { CustomToolbar } from './ToolBar';
 
 export const Editor = ({fonts}) => {
     const [value, setValue] = useState('');
-    const [val, setVal] = useState(true);
-    const [val2, setVal2] = useState(false);
+    const [isQuillVisible, setIsQuillVisible] = useState(true);
+    const [isQuillVisibleSupport, setIsQuillVisibleSupport] = useState(false);
+    const [isToggleOpen, setIsToggleOpen] = useState(true);
+    const [storedFormatting, setStoredFormatting] = useState();
+
     const quillRef = useRef();
 
     register(Quill);
 
-    useEffect(() => {
-        setButtonTitle();
-    
-        // cleanPastFormatting(quillRef);
-    }, []);
+    useLayoutEffect(() => {
+        setIsQuillVisibleSupport(true);
+        setIsQuillVisible(false);
+    }, [fonts, isToggleOpen]);
 
     useLayoutEffect(() => {
-        console.log('1')
-        setVal2(true);
-        setVal(false);
-    }, [fonts]);
+        if (isQuillVisibleSupport) {
+            setIsQuillVisible(true);
+            setIsQuillVisibleSupport(false);
 
-    useLayoutEffect(() => {
-        if (val2) {
-            console.log('2')
-            setVal(true);
-            setVal2(false);
+        } else {
+            setButtonTitle();
         }
-    }, [val2]);
+    }, [isQuillVisibleSupport]);
 
     const modules = useMemo(() => ({
         toolbar: {
@@ -41,6 +39,9 @@ export const Editor = ({fonts}) => {
             insertStar: insertStar,
             changeSize: changeTextSize,
             specificFonts: changeSpecificFonts,
+            showHideFormatting:  function () {
+              toggleFormatting.call(this, setIsToggleOpen, isToggleOpen, setStoredFormatting, storedFormatting);
+            },
           },
           container: '#toolbar',
         },
@@ -50,23 +51,21 @@ export const Editor = ({fonts}) => {
         clipboard: {
           matchVisual: false,
         },
-    }),[]);
-
-    // console.log(fonts);
+    }),[isToggleOpen, storedFormatting]);
 
     return (
         <>
-            {val && <>
-                <CustomToolbar fonts={fonts} values={fontsValues} />
-                <ReactQuill
-                    ref={quillRef}
-                    theme='snow'
-                    modules={modules}
-                    formats={formats}
-                    value={value} 
-                    onChange={setValue}
-                />
-            </>}
+          {isQuillVisible && <>
+              <CustomToolbar fonts={fonts} values={fontsValues} isToggleOpen={isToggleOpen} />
+              <ReactQuill
+                  ref={quillRef}
+                  theme='snow'
+                  modules={modules}
+                  formats={formats}
+                  value={value} 
+                  onChange={setValue}
+              />
+          </>}
         </>
       )
 };
