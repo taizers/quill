@@ -13,15 +13,15 @@ export const Editor = ({fonts}) => {
     const [isQuillVisibleSupport, setIsQuillVisibleSupport] = useState(false);
     const [isToggleOpen, setIsToggleOpen] = useState(true);
     const [storedFormatting, setStoredFormatting] = useState(null);
-    const [inserts, setInserts] = useState([]);
 
     const quillRef = useRef();
+    const insertsRef = useRef();
 
     register(Quill);
 
     useEffect(() => {
       if (!isToggleOpen) {
-        setInserts([]);
+        insertsRef.current = [];
       }
     }, [isToggleOpen])
 
@@ -46,7 +46,7 @@ export const Editor = ({fonts}) => {
             changeSize: changeTextSize,
             specificFonts: changeSpecificFonts,
             showHideFormatting:  function () {
-              toggleFormatting.call(this, setIsToggleOpen, isToggleOpen, setStoredFormatting, storedFormatting, inserts);
+              toggleFormatting.call(this, setIsToggleOpen, isToggleOpen, setStoredFormatting, storedFormatting, insertsRef);
             },
           },
           container: '#toolbar',
@@ -61,18 +61,13 @@ export const Editor = ({fonts}) => {
 
     const handleChange = ( html, delta, source, editor) => {
       setValue(html);
-      const editorLength = editor.getLength();
-      const deltaDeleteLenght = delta?.ops[delta?.ops.length]?.delete;
+      const editorTextLength = editor.getLength();
+      const deltaDeleteLenght = delta?.ops[delta?.ops?.length-1]?.delete;
 
-      if (storedFormatting !== null && (deltaDeleteLenght !== editorLength-1 || deltaDeleteLenght !== editorLength))  { 
+      if (storedFormatting !== null && (deltaDeleteLenght !== editorTextLength-1 || deltaDeleteLenght !== editorTextLength))  { 
+        const arr =  [...insertsRef.current, delta.ops];
 
-        console.log('editorLength',editorLength);
-        console.log('delta ops',delta.ops);
-        
-        const arr =  [...inserts, delta.ops];
-
-        console.log('arr', arr)
-        setInserts(arr);
+        insertsRef.current = arr;
       }
     };
 

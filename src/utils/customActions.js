@@ -96,7 +96,7 @@ export function toggleFormatting (setIsToggleOpen, isToggleOpen, setStoredFormat
         this.quill?.setContents({ 'ops': [...newOps] }, 'api'); 
     } else {
         const previosFormattingText = [...storedFormatting];
-        const changedInserts = [...inserts];
+        const changedInserts = [...inserts.current];
         setStoredFormatting(null);
 
         console.log('changedInserts', changedInserts);
@@ -104,9 +104,7 @@ export function toggleFormatting (setIsToggleOpen, isToggleOpen, setStoredFormat
         this.quill?.setContents({ 'ops': [...previosFormattingText] }, 'api');
         
         changedInserts?.forEach((item, index) => {
-            if (index !== changedInserts.length-1) {
-                this.quill?.updateContents(item);
-            }
+            this.quill?.updateContents(item);
         })
     }
 
