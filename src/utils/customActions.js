@@ -85,28 +85,25 @@ export function changeTextSize() {
     editor.formatText(range, 'size', '20px');
 };
 
-export function toggleFormatting (setIsToggleOpen, isToggleOpen, setStoredFormatting, storedFormatting, inserts) {
-    // console.log('start toggle formatting function', isToggleOpen);
-    if (isToggleOpen) {
+export function toggleFormatting (toggleOpen, storedFormat, insertsRef) {
+    if (toggleOpen.isToggleOpen) {
         const ops = this.quill?.editor?.delta?.ops;
 
         const newOps = ops?.map(op => ({insert: op.insert}));
 
-        setStoredFormatting(ops);
+        storedFormat.setStoredFormatting(ops);
         this.quill?.setContents({ 'ops': [...newOps] }, 'api'); 
     } else {
-        const previosFormattingText = [...storedFormatting];
-        const changedInserts = [...inserts.current];
-        setStoredFormatting(null);
-
-        console.log('changedInserts', changedInserts);
+        const previosFormattingText = [...storedFormat.storedFormatting];
+        const changedInserts = [...insertsRef.current];
+        storedFormat.setStoredFormatting(null);
 
         this.quill?.setContents({ 'ops': [...previosFormattingText] }, 'api');
         
-        changedInserts?.forEach((item, index) => {
+        changedInserts?.forEach(item => {
             this.quill?.updateContents(item);
         })
     }
 
-    setIsToggleOpen(!isToggleOpen);
+    toggleOpen.setIsToggleOpen(!toggleOpen.isToggleOpen);
 };

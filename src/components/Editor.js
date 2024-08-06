@@ -46,7 +46,7 @@ export const Editor = ({fonts}) => {
             changeSize: changeTextSize,
             specificFonts: changeSpecificFonts,
             showHideFormatting:  function () {
-              toggleFormatting.call(this, setIsToggleOpen, isToggleOpen, setStoredFormatting, storedFormatting, insertsRef);
+              toggleFormatting.call(this, {setIsToggleOpen, isToggleOpen}, {setStoredFormatting, storedFormatting}, insertsRef);
             },
           },
           container: '#toolbar',

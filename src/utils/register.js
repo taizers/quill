@@ -14,6 +14,4 @@ export const register = (Quill) => {
 
   // Register clear past text event
   Quill.register('modules/clipboard', PlainClipboard, true);
-
-  // Quill.modules["undo-manager"].DEFAULTS.delay = 0;
 };
