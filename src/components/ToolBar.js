@@ -39,7 +39,7 @@ export const CustomToolbar = ({fonts, values, isToggleOpen}) => (
     </button>
     <button className='ql-clean' />
     <button className='ql-image' />
-    <select className='ql-specificFonts ql-size ' style={{width: '260px'}} defaultValue={specificFonts.find(item => item.label === defaultString).value}>
+    <select className='ql-specificFonts ql-size' style={{width: '260px'}} defaultValue={specificFonts.find(item => item.label === defaultString).value}>
       {specificFonts.map(item => <option value={item.value}>{item.label}</option>)}
     </select>
     <select className='ql-font' defaultValue={defaultFont.value}>

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useMemo, useLayoutEffect } from 'react';
+import React, { useState, useRef, useMemo, useLayoutEffect, useEffect } from 'react';
 import ReactQuill, { Quill } from 'react-quill';
 import { changeSpecificFonts, changeTextSize, insertStar, toggleFormatting } from '../utils/customActions';
 import { register} from '../utils/register';
@@ -12,11 +12,18 @@ export const Editor = ({fonts}) => {
     const [isQuillVisible, setIsQuillVisible] = useState(true);
     const [isQuillVisibleSupport, setIsQuillVisibleSupport] = useState(false);
     const [isToggleOpen, setIsToggleOpen] = useState(true);
-    const [storedFormatting, setStoredFormatting] = useState();
+    const [storedFormatting, setStoredFormatting] = useState(null);
+    const [inserts, setInserts] = useState([]);
 
     const quillRef = useRef();
 
     register(Quill);
+
+    useEffect(() => {
+      if (!isToggleOpen) {
+        setInserts([]);
+      }
+    }, [isToggleOpen])
 
     useLayoutEffect(() => {
         setIsQuillVisibleSupport(true);
@@ -27,7 +34,6 @@ export const Editor = ({fonts}) => {
         if (isQuillVisibleSupport) {
             setIsQuillVisible(true);
             setIsQuillVisibleSupport(false);
-
         } else {
             setButtonTitle();
         }
@@ -40,7 +46,7 @@ export const Editor = ({fonts}) => {
             changeSize: changeTextSize,
             specificFonts: changeSpecificFonts,
             showHideFormatting:  function () {
-              toggleFormatting.call(this, setIsToggleOpen, isToggleOpen, setStoredFormatting, storedFormatting);
+              toggleFormatting.call(this, setIsToggleOpen, isToggleOpen, setStoredFormatting, storedFormatting, inserts);
             },
           },
           container: '#toolbar',
@@ -51,21 +57,39 @@ export const Editor = ({fonts}) => {
         clipboard: {
           matchVisual: false,
         },
-    }),[isToggleOpen, storedFormatting]);
+    }), [isToggleOpen, storedFormatting]);
+
+    const handleChange = ( html, delta, source, editor) => {
+      setValue(html);
+      const editorLength = editor.getLength();
+      const deltaDeleteLenght = delta?.ops[delta?.ops.length]?.delete;
+
+      if (storedFormatting !== null && (deltaDeleteLenght !== editorLength-1 || deltaDeleteLenght !== editorLength))  { 
+
+        console.log('editorLength',editorLength);
+        console.log('delta ops',delta.ops);
+        
+        const arr =  [...inserts, delta.ops];
+
+        console.log('arr', arr)
+        setInserts(arr);
+      }
+    };
 
     return (
-        <>
+        <div className='p-3'>
           {isQuillVisible && <>
               <CustomToolbar fonts={fonts} values={fontsValues} isToggleOpen={isToggleOpen} />
               <ReactQuill
                   ref={quillRef}
                   theme='snow'
+                  style={{height: '200px'}}
                   modules={modules}
                   formats={formats}
                   value={value} 
-                  onChange={setValue}
+                  onChange={handleChange}
               />
           </>}
-        </>
+        </div>
       )
 };

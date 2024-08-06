@@ -1,7 +1,7 @@
 import React from 'react';
 import { CheckboxGroup, Checkbox, FormControl, Box } from '@primer/react'
 
-export const CheckBoxGroup = ({values, setItems}) => {
+const CheckBoxGroup = ({values, setItems}) => {
     return (
         <Box sx={{display: 'flex', justifyContent: 'center', p: 2, }}>
             <CheckboxGroup onChange={setItems}>
@@ -18,3 +18,5 @@ export const CheckBoxGroup = ({values, setItems}) => {
         </Box>
       )
 };
+
+export default CheckBoxGroup;

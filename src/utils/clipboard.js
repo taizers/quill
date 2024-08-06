@@ -1,6 +1,6 @@
-import Quill from 'quill'
-const Clipboard = Quill.import('modules/clipboard')
-const Delta = Quill.import('delta')
+import Quill from 'quill';
+const Clipboard = Quill.import('modules/clipboard');
+const Delta = Quill.import('delta');
 
 export class PlainClipboard extends Clipboard {
   onPaste (e) {

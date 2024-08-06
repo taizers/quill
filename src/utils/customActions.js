@@ -11,26 +11,21 @@ const redSpecificFontFormatting = (quill) => {
     const {editor, range} = getEditorAndRange(quill);
   
     editor.removeFormat(range);
-    editor.formatText(range, 'color', 'red');
-    editor.formatText(range, 'size', '14px');
+    editor.formatText(range, {'color': 'red', 'size': '14px'});
 };
   
 const boldSpecificFontFormatting = (quill) => {
     const {editor, range} = getEditorAndRange(quill);
   
     editor.removeFormat(range);
-    editor.formatText(range, 'bold', 'true');
-    editor.formatText(range, 'size', '10px');
+    editor.formatText(range, {'bold': 'true', 'size': '10px'});
 };
   
 const greenSpecificFontFormatting = (quill) => {
     const {editor, range} = getEditorAndRange(quill);
   
     editor.removeFormat(range);
-    editor.formatText(range, 'color', 'green');
-    editor.formatText(range, 'italic', 'true');
-    editor.formatText(range, 'size', '12px');
-    editor.formatText(range, 'font', 'roboto');
+    editor.formatText(range, {'color': 'green'}, {'italic': 'true'}, {'size': '12px'}, {'font': 'roboto'});
 };
   
 const defaultSpecificFontFormatting = (quill) => {
@@ -90,22 +85,29 @@ export function changeTextSize() {
     editor.formatText(range, 'size', '20px');
 };
 
-export function toggleFormatting (setIsToggleOpen, isToggleOpen, setStoredFormatting, storedFormatting) {
-    const ops = this.quill?.editor?.delta?.ops;
-    
+export function toggleFormatting (setIsToggleOpen, isToggleOpen, setStoredFormatting, storedFormatting, inserts) {
+    // console.log('start toggle formatting function', isToggleOpen);
     if (isToggleOpen) {
+        const ops = this.quill?.editor?.delta?.ops;
+
         const newOps = ops?.map(op => ({insert: op.insert}));
 
         setStoredFormatting(ops);
-        this.quill?.setContents({ 'ops': newOps }); 
+        this.quill?.setContents({ 'ops': [...newOps] }, 'api'); 
     } else {
-        // const newStoredOps = ops.map((item) => {
-        //     const storedItem = storedFormatting.find((findItem) => (findItem.insert === item && findItem.attributes));
-        //     return storedItem || item;
-        // });
-
-        this.quill?.setContents({ 'ops': storedFormatting }); 
+        const previosFormattingText = [...storedFormatting];
+        const changedInserts = [...inserts];
         setStoredFormatting(null);
+
+        console.log('changedInserts', changedInserts);
+
+        this.quill?.setContents({ 'ops': [...previosFormattingText] }, 'api');
+        
+        changedInserts?.forEach((item, index) => {
+            if (index !== changedInserts.length-1) {
+                this.quill?.updateContents(item);
+            }
+        })
     }
 
     setIsToggleOpen(!isToggleOpen);
