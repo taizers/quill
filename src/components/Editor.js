@@ -65,9 +65,7 @@ export const Editor = ({fonts}) => {
       const deltaDeleteLenght = delta?.ops[delta?.ops?.length-1]?.delete;
 
       if (storedFormatting !== null && (deltaDeleteLenght !== editorTextLength-1 || deltaDeleteLenght !== editorTextLength))  { 
-        const arr =  [...insertsRef.current, delta.ops];
-
-        insertsRef.current = arr;
+        insertsRef.current = [...insertsRef.current, delta.ops];
       }
     };
 

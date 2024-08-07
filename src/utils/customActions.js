@@ -25,7 +25,7 @@ const greenSpecificFontFormatting = (quill) => {
     const {editor, range} = getEditorAndRange(quill);
   
     editor.removeFormat(range);
-    editor.formatText(range, {'color': 'green'}, {'italic': 'true'}, {'size': '12px'}, {'font': 'roboto'});
+    editor.formatText(range, {'color': 'green', 'italic': 'true', 'size': '12px', 'font': 'roboto'});
 };
   
 const defaultSpecificFontFormatting = (quill) => {
