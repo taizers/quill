@@ -61,21 +61,28 @@ export const Editor = ({fonts}) => {
         },
     }), [isToggleOpen, storedFormatting]);
 
-    const handleChange = ( html, delta, source, editor) => {
+    const handleChange = (html, delta, source, editor) => {
       setValue(html);
+      const currentInserts = insertsRef.current && [...insertsRef.current];
 
-      if (storedFormatting !== null && !isToggleOpen && insertsRef.current !== null)  {    
-        if (
-          insertsRef.current?.length === 0 && 
-          delta.ops[0]?.insert && 
-          delta.ops[0]?.insert?.length !== 0 && 
-          delta.ops[0]?.insert === editor.getContents()?.ops[0].insert &&
-          delta.ops[1]?.delete
-        ) {
-          return;
-        }
-        insertsRef.current = [...insertsRef.current, delta.ops];
+      if (!storedFormatting || isToggleOpen || !currentInserts) {
+        return;
       }
+
+      const insertContent =  editor.getContents()?.ops[0].insert;
+      const deltasContent =  delta.ops[0]?.insert;
+
+      if (
+        currentInserts?.length === 0 && 
+        deltasContent && 
+        deltasContent?.length !== 0 && 
+        deltasContent === insertContent &&
+        delta.ops[1]?.delete
+      ) {
+        return;
+      }
+
+      insertsRef.current = [...currentInserts, delta.ops];
     };
 
     return (
