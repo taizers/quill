@@ -11,11 +11,11 @@ export const fontsValues = [
     },
     {
       label: 'Comic Sans',
-      value: 'comic-sans',
+      value: 'comicsans',
     },
     {
       label: 'Courier New',
-      value: 'courier-new',
+      value: 'couriernew',
     },
     {
       label: 'Georgia',
@@ -31,7 +31,7 @@ export const fontsValues = [
     },
     {
       label: 'Sans Serif',
-      value: 'sans-serif',
+      value: 'sansserif',
     }
 ];
 
@@ -44,12 +44,12 @@ export const formats = [
 
 export const fonts = [
     "arial",
-    "comic-sans",
-    "courier-new",
+    "comicsans",
+    "couriernew",
     "georgia",
     "helvetica",
     "roboto",
-    "sans-serif"
+    "sansserif"
 ];
 
 export const fontSizes = ['10px', '12px', '14px', '16px', '18px', '20px'];

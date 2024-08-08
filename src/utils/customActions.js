@@ -127,7 +127,6 @@ const getUpdatedDelta = (oldOps, changesArr) => {
     return deltaResult;
 };
 
-
 export function toggleFormatting (isToggleOpen, storedFormat, insertsRef) {
     if (isToggleOpen) {
         const ops = this.quill?.editor?.delta?.ops;

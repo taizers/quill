@@ -3,11 +3,11 @@ html, body{
 };
 
 /* Set dropdown font-families */
-#toolbar-container .ql-font span[data-label="Sans Serif"]::before {
+#toolbar-container .ql-font span[data-label="Sansserif"]::before {
     font-family: "Sans Serif";
 }
-#toolbar .ql-font span[data-label='courier-new']::before {
-    font-family: 'Courier-new';
+#toolbar .ql-font span[data-label='couriernew']::before {
+    font-family: 'Courier new';
 }
 #toolbar .ql-font span[data-label='georgia']::before {
     font-family: 'Georgia';
@@ -15,8 +15,8 @@ html, body{
 #toolbar .ql-font span[data-label='helvetica']::before {
     font-family: 'Helvetica';
 }
-#toolbar .ql-font span[data-label='comic-sans']::before {
-    font-family: 'Comic-sans';
+#toolbar .ql-font span[data-label='comicsans']::before {
+    font-family: 'Comic sans';
 }
 #toolbar .ql-font span[data-label='roboto']::before {
     font-family: 'Roboto';
@@ -26,7 +26,7 @@ html, body{
 }
 
   /* Set content font-families */
-.ql-font-courier-new {
+.ql-font-couriernew {
     font-family: 'Courier New', sans-serif;
 }
 .ql-font-georgia {
@@ -35,7 +35,7 @@ html, body{
 .ql-font-helvetica {
     font-family: 'Helvetica', sans-serif;
 }
-.ql-font-comic-sans {
+.ql-font-comicsans {
     font-family: 'Comic Sans', sans-serif;
 }
 .ql-font-roboto {
@@ -44,7 +44,9 @@ html, body{
 .ql-font-arial {
     font-family: 'Arial', sans-serif;
 }
-
+.ql-font-sansserif {
+    font-family: sans-serif;
+}
 
 .card {
     background: var(--surface-card);
