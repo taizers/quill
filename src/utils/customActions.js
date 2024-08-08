@@ -144,7 +144,6 @@ export function toggleFormatting (isToggleOpen, storedFormat, insertsRef) {
         const previosFormattingText = storedFormat?.storedFormatting?.length ? [...storedFormat.storedFormatting] : [];
         const changedInserts = insertsRef?.current && [...insertsRef.current];
         
-        insertsRef.current = null;
         storedFormat.setStoredFormatting(null);
 
         if (!changedInserts?.length) {

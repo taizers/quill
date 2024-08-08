@@ -63,14 +63,14 @@ export const Editor = ({fonts}) => {
 
     const handleChange = (html, delta, source, editor) => {
       setValue(html);
-      const currentInserts = insertsRef.current && [...insertsRef.current];
 
-      if (!storedFormatting || isToggleOpen || !currentInserts) {
+      if (!storedFormatting || isToggleOpen) {
         return;
       }
 
       const insertContent =  editor.getContents()?.ops[0].insert;
       const deltasContent =  delta.ops[0]?.insert;
+      const currentInserts = insertsRef.current && [...insertsRef.current];
 
       if (
         currentInserts?.length === 0 && 
