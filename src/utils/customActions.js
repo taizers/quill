@@ -1,4 +1,7 @@
+import { Quill } from 'react-quill';
 import { defaultString } from "../constants";
+
+const Delta = Quill.import('delta');
 
 const getEditorAndRange = (quill) =>  {
     const editor = quill?.current ? quill?.current?.getEditor() : quill;
@@ -85,25 +88,33 @@ export function changeTextSize() {
     editor.formatText(range, 'size', '20px');
 };
 
-export function toggleFormatting (toggleOpen, storedFormat, insertsRef) {
-    if (toggleOpen.isToggleOpen) {
+export function toggleFormatting (isToggleOpen, storedFormat, insertsRef) {
+    if (isToggleOpen) {
         const ops = this.quill?.editor?.delta?.ops;
 
         const newOps = ops?.map(op => ({insert: op.insert}));
 
         storedFormat.setStoredFormatting(ops);
-        this.quill?.setContents({ 'ops': [...newOps] }, 'api'); 
+            
+        this.quill?.setContents(newOps); 
     } else {
-        const previosFormattingText = [...storedFormat.storedFormatting];
+        const previosFormattingText = storedFormat?.storedFormatting?.length ? [...storedFormat.storedFormatting] : [];
         const changedInserts = [...insertsRef.current];
+        insertsRef.current = null;
         storedFormat.setStoredFormatting(null);
 
-        this.quill?.setContents({ 'ops': [...previosFormattingText] }, 'api');
-        
-        changedInserts?.forEach(item => {
-            this.quill?.updateContents(item);
-        })
-    }
+        if (!changedInserts.length) {
+            this.quill?.setContents(previosFormattingText);
+            return;
+        };
 
-    toggleOpen.setIsToggleOpen(!toggleOpen.isToggleOpen);
+        let deltaResult = new Delta(previosFormattingText);
+
+        changedInserts.forEach(item => {
+            const deltaItem = new Delta(item);
+            deltaResult = new Delta(deltaResult.compose(deltaItem));
+        }); 
+
+        this.quill?.setContents(deltaResult);
+    }
 };

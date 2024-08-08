@@ -2,6 +2,7 @@ export const defaultString = 'default';
 export const defaultMaxPage = 6;
 export const defaultCurrentPage = 0;
 export const defaultLimit = 5;
+export const defaultDelay = 500;
 
 export const fontsValues = [
     {

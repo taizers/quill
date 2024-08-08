@@ -46,7 +46,9 @@ export const Editor = ({fonts}) => {
             changeSize: changeTextSize,
             specificFonts: changeSpecificFonts,
             showHideFormatting:  function () {
-              toggleFormatting.call(this, {setIsToggleOpen, isToggleOpen}, {setStoredFormatting, storedFormatting}, insertsRef);
+              toggleFormatting.call(this, isToggleOpen, {setStoredFormatting, storedFormatting}, insertsRef);
+              
+              setIsToggleOpen(!isToggleOpen);
             },
           },
           container: '#toolbar',
@@ -61,10 +63,17 @@ export const Editor = ({fonts}) => {
 
     const handleChange = ( html, delta, source, editor) => {
       setValue(html);
-      const editorTextLength = editor.getLength();
-      const deltaDeleteLenght = delta?.ops[delta?.ops?.length-1]?.delete;
 
-      if (storedFormatting !== null && (deltaDeleteLenght !== editorTextLength-1 || deltaDeleteLenght !== editorTextLength))  { 
+      if (storedFormatting !== null && !isToggleOpen && insertsRef.current !== null)  {    
+        if (
+          insertsRef.current?.length === 0 && 
+          delta.ops[0]?.insert && 
+          delta.ops[0]?.insert?.length !== 0 && 
+          delta.ops[0]?.insert === editor.getContents()?.ops[0].insert &&
+          delta.ops[1]?.delete
+        ) {
+          return;
+        }
         insertsRef.current = [...insertsRef.current, delta.ops];
       }
     };
