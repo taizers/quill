@@ -92,28 +92,26 @@ const trimString = (input) => {
     if (input.includes('\n')) {
         if (input.trim() === '') {
             return true;
-        } else {
-            return input.replace(/\n+$/, '');
         }
+        
+        return input.replace(/\n+$/, '');
     }
     
     return false;
 };
 
 const trimLastInsert = (ops) => {
-    const newOps = [...ops];
-    const oldInsert = newOps[newOps.length-1].insert;
-    const newInsert = trimString(oldInsert);
+    const insert = trimString(ops[ops.length-1].insert);
 
-    if (newInsert === true) {
-        return newOps.slice(0, -1);
+    if (insert === true) {
+        return ops.slice(0, -1);
     }
-    if (newInsert === false) {
-        return newOps;
+    if (insert === false) {
+        return ops;
     }
 
-    newOps[newOps.length-1].insert = newInsert;
-    return newOps;
+    ops[ops.length-1].insert = insert;
+    return ops;
 }
 
 const getUpdatedDelta = (oldOps, changesArr) => {
@@ -127,31 +125,34 @@ const getUpdatedDelta = (oldOps, changesArr) => {
     return deltaResult;
 };
 
+const setContent = (quill, ops) => {
+    const updatedOps = trimLastInsert(ops);
+
+    quill?.setContents(updatedOps); 
+};
+
 export function toggleFormatting (isToggleOpen, storedFormat, insertsRef) {
     if (isToggleOpen) {
         const ops = this.quill?.editor?.delta?.ops;
+        
+        storedFormat.setStoredFormatting(ops);
 
         const newOps = ops?.map(op => ({insert: op.insert}));
 
-        const updatedOps = trimLastInsert(newOps);
-
-        storedFormat.setStoredFormatting(ops);
-            
-        this.quill?.setContents(updatedOps); 
+        setContent(this.quill, newOps)
     } else {
         const previosFormattingText = storedFormat?.storedFormatting?.length ? [...storedFormat.storedFormatting] : [];
         const changedInserts = insertsRef?.current && [...insertsRef.current];
+        
         insertsRef.current = null;
         storedFormat.setStoredFormatting(null);
 
         if (!changedInserts?.length) {
-            this.quill?.setContents(previosFormattingText);
+            setContent(this.quill, previosFormattingText)
             return;
         };
 
         const deltaResult = getUpdatedDelta(previosFormattingText, changedInserts);
-        const updatedOps = trimLastInsert(deltaResult.ops);
-
-        this.quill?.setContents(updatedOps);
+        setContent(this.quill, deltaResult.ops)
     }
 };

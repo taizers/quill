@@ -11,7 +11,6 @@ import CarouselComponent from './components/CarouselComponent/CarouselComponent'
 
 const App = () => {
   const [fonts, setFonts] = useState([]);
-
   return (
     <>
       <BaseStyles>
