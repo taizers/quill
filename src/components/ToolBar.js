@@ -22,13 +22,14 @@ export const CustomToolbar = ({fonts, values, isToggleOpen}) => (
     </select>
     <button className='ql-bold' />
     <button className='ql-italic' />
-    <select className='ql-color'>
+    <select className='ql-color' defaultValue={'black'}>
       <option value='red' />
       <option value='green' />
       <option value='blue' />
       <option value='orange' />
       <option value='violet' />
       <option value='#d0d1d2' />
+      <option value='black' />
     </select>
     <button className='ql-insertStar'>
       <CustomButton />
