@@ -85,3 +85,9 @@ export const responsiveOptions = [
       numScroll: 1
   }
 ];
+
+export const severity = {
+  'INSTOCK': 'success',
+  'LOWSTOCK': 'warning',
+  'OUTOFSTOCK': 'danger',
+};
