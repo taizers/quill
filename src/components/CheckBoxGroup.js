@@ -1,11 +1,12 @@
 import React from 'react';
 import { CheckboxGroup, Checkbox, FormControl, Box } from '@primer/react'
+import { chooseFontTitle } from '../constants';
 
-const CheckBoxGroup = ({values, setItems}) => {
+const CheckBoxGroup = ({values, setItems, isToggleOpen}) => {
     return (
         <Box sx={{display: 'flex', justifyContent: 'center', p: 2, }}>
-            <CheckboxGroup onChange={setItems}>
-                <CheckboxGroup.Label>Choose Styles</CheckboxGroup.Label>
+            <CheckboxGroup onChange={setItems} disabled={!isToggleOpen}>
+                <CheckboxGroup.Label>{chooseFontTitle}</CheckboxGroup.Label>
                 {
                     values?.map((item, index) => (
                         <FormControl key={index}>

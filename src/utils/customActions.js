@@ -131,6 +131,16 @@ const setContent = (quill, ops) => {
     quill?.setContents(updatedOps); 
 };
 
+export const clearPickersEvent = (quillRef) => {
+    const toolbar = quillRef.current.getEditor().getModule('toolbar');
+    const pickers = toolbar.container.querySelectorAll('span.ql-picker');
+  
+    pickers.forEach(element => {  
+      element.addEventListener('mousedown', evt => evt.stopImmediatePropagation(), true);
+      element.addEventListener('keydown', evt => evt.stopImmediatePropagation(), true);
+    })
+  };
+
 export function toggleFormatting (isToggleOpen, storedFormat, insertsRef) {
     if (isToggleOpen) {
         const ops = this.quill?.editor?.delta?.ops;

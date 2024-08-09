@@ -30,6 +30,19 @@ const CarouselComponent = () => {
         }
     }, [currentCarouselItemNumber]);
 
+    const fn = (prevCarouselPage, nextCarouselPage) => {
+        console.log(`prevCarouselPage: ${prevCarouselPage}, nextCarouselPage: ${nextCarouselPage}`);
+
+    }
+
+    const onCarouselChangePage = (evt) =>{
+        if (currentCarouselItemNumber !== evt.page) {
+            fn(currentCarouselItemNumber, evt.page);
+        }
+
+        setCurrentCarouselItemNumber(evt.page)
+    };
+
     return (
         <div className='card'>
             <Carousel
@@ -39,7 +52,7 @@ const CarouselComponent = () => {
                 responsiveOptions={responsiveOptions} 
                 itemTemplate={CarouselItemTemplate} 
                 page={currentCarouselItemNumber}
-                onPageChange={(e) => setCurrentCarouselItemNumber(e.page)}
+                onPageChange={onCarouselChangePage}
             />
         </div>
       )

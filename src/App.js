@@ -11,12 +11,14 @@ import CarouselComponent from './components/CarouselComponent/CarouselComponent'
 
 const App = () => {
   const [fonts, setFonts] = useState([]);
+  const [isToggleFormattingOpen, setIsToggleFormattingOpen] = useState(true);
+
   return (
     <>
       <BaseStyles>
         <div className='.app'>
-          <CheckBoxGroup values={fontsValues} setItems={setFonts}/>
-          <Editor fonts={fonts} />
+          <CheckBoxGroup values={fontsValues} setItems={setFonts} isToggleOpen={isToggleFormattingOpen}/>
+          <Editor fonts={fonts} isToggleOpen={isToggleFormattingOpen} setIsToggleOpen={setIsToggleFormattingOpen}/>
           <CarouselComponent />
         </div>
       </BaseStyles>

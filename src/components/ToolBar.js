@@ -20,8 +20,8 @@ export const CustomToolbar = ({fonts, values, isToggleOpen}) => (
       {fontSizes.map((item, index) => <option key={index} value={item}>{item}</option>)}
       <option value={defaultFontSize.value}>{defaultFontSize.label}</option>
     </select>
-    <button className='ql-bold' />
-    <button className='ql-italic' />
+    <button disabled={!isToggleOpen} className='ql-bold' />
+    <button disabled={!isToggleOpen} className='ql-italic' />
     <select className='ql-color' defaultValue={'black'}>
       <option value='red' />
       <option value='green' />
@@ -31,14 +31,14 @@ export const CustomToolbar = ({fonts, values, isToggleOpen}) => (
       <option value='#d0d1d2' />
       <option value='black' />
     </select>
-    <button className='ql-insertStar'>
+    <button disabled={!isToggleOpen} className={`ql-insertStar ${!isToggleOpen? 'custom-button' : ''}`}>
       <CustomButton />
     </button>
-    <button className='ql-changeSize'>
+    <button disabled={!isToggleOpen} className={`ql-changeSize ${!isToggleOpen? 'custom-button' : ''}`}>
       <CustomChangeSizeButton />
     </button>
-    <button className='ql-clean' />
-    <button className='ql-image' />
+    <button disabled={!isToggleOpen} className='ql-clean' />
+    <button disabled={!isToggleOpen} className='ql-image' />
     <select className='ql-specificFonts ql-size' style={{width: '260px'}} defaultValue={specificFonts.find(item => item.label === defaultString).value}>
       {specificFonts.map((item, index) => <option key={index} value={item.value}>{item.label}</option>)}
     </select>

@@ -1,17 +1,16 @@
 import React, { useState, useRef, useMemo, useLayoutEffect, useEffect } from 'react';
 import ReactQuill, { Quill } from 'react-quill';
-import { changeSpecificFonts, changeTextSize, insertStar, toggleFormatting } from '../utils/customActions';
+import { changeSpecificFonts, changeTextSize, clearPickersEvent, insertStar, toggleFormatting } from '../utils/customActions';
 import { register} from '../utils/register';
 import { setButtonTitle } from '../utils/toolbarButtonsTitle';
 import { bindings } from '../utils/bindButtons';
-import { fontsValues, formats } from '../constants';
+import { fontsValues, formats, quillPlaceholderValue } from '../constants';
 import { CustomToolbar } from './ToolBar';
 
-export const Editor = ({fonts}) => {
+export const Editor = ({fonts, isToggleOpen, setIsToggleOpen}) => {
     const [value, setValue] = useState('');
     const [isQuillVisible, setIsQuillVisible] = useState(true);
     const [isQuillVisibleSupport, setIsQuillVisibleSupport] = useState(false);
-    const [isToggleOpen, setIsToggleOpen] = useState(true);
     const [storedFormatting, setStoredFormatting] = useState(null);
 
     const quillRef = useRef();
@@ -22,6 +21,10 @@ export const Editor = ({fonts}) => {
     useEffect(() => {
       if (!isToggleOpen) {
         insertsRef.current = [];
+
+        setTimeout(() => {
+          clearPickersEvent(quillRef);
+        }, 100);
       }
     }, [isToggleOpen])
 
@@ -91,6 +94,7 @@ export const Editor = ({fonts}) => {
               <CustomToolbar fonts={fonts} values={fontsValues} isToggleOpen={isToggleOpen} />
               <ReactQuill
                   ref={quillRef}
+                  placeholder={quillPlaceholderValue}
                   theme='snow'
                   style={{height: '200px'}}
                   modules={modules}

@@ -54,3 +54,11 @@ html, body{
     border-radius: 10px;
     margin-bottom: 1rem;
 }
+
+.custom-button {
+    color: black;
+}
+
+.custom-button:hover {
+    color: #06c;
+}

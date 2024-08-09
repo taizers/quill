@@ -6,7 +6,7 @@ const CarouselItemTemplate = (product) => {
     return (
         <div className="border-1 surface-border border-round m-2 text-center py-5 px-3">
             <div className="mb-3">
-                <img src={`https://primefaces.org/cdn/primereact/images/product/${product.image}`} alt={product.name} className="w-6 shadow-2" />
+                <img src={`https://primefaces.org/cdn/primereact/images/product/${product.image}`} alt={product.name} className="w-8 shadow-2" />
             </div>
             <div>
                 <h4 className="mb-1">{product.name}</h4>
