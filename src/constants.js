@@ -31,10 +31,6 @@ export const fontsValues = [
     {
       label: 'Roboto',
       value: 'roboto',
-    },
-    {
-      label: 'Sans Serif',
-      value: 'sansserif',
     }
 ];
 
@@ -52,7 +48,6 @@ export const fonts = [
     "georgia",
     "helvetica",
     "roboto",
-    "sansserif"
 ];
 
 export const fontSizes = ['10px', '12px', '14px', '16px', '18px', '20px'];
