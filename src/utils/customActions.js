@@ -1,5 +1,5 @@
 import { Quill } from 'react-quill';
-import { defaultString } from "../constants";
+import { toggleFormattingButtonName } from "../constants";
 
 const Delta = Quill.import('delta');
 
@@ -39,29 +39,27 @@ const defaultSpecificFontFormatting = (quill) => {
 
 export const specificFonts = [
     {
-        value: 'red',
         label: 'Красный, 14px',
         function: redSpecificFontFormatting,
     },
     {
-        value: 'bold',
         label: 'Жирный, 10px',
         function: boldSpecificFontFormatting,
     },
     {
-        value: 'green',
         label: 'Зелёный, наклонный, 12px, Roboto',
         function: greenSpecificFontFormatting,
     },
     {
-        value: 'false',
-        label: defaultString,
+        label: 'false',
         function: defaultSpecificFontFormatting,
     },
 ];
 
+export const specificFontsLabels = specificFonts.map(item => item.label).slice(0,-1);
+
 export function changeSpecificFonts(value) {
-    specificFonts.find(item => item.value === value.toString()).function(this.quill);
+    specificFonts.find(item => item.label === value.toString()).function(this.quill);
 };
 
 export function insertStar() {
@@ -77,17 +75,6 @@ export function insertStar() {
     editor.setSelection(cursorPosition + 1);
 };
   
-// change size of selected text
-export function changeTextSize() {
-    const {editor, range} = getEditorAndRange(this.quill);
-  
-    if (!range || !range) {
-      return;
-    }
-  
-    editor.formatText(range, 'size', '20px');
-};
-
 const trimString = (input) => {
     if (input.includes('\n')) {
         if (input.trim() === '') {
@@ -134,12 +121,17 @@ const setContent = (quill, ops) => {
 export const clearPickersEvent = (quillRef) => {
     const toolbar = quillRef.current.getEditor().getModule('toolbar');
     const pickers = toolbar.container.querySelectorAll('span.ql-picker');
+    const buttons = toolbar.container.querySelectorAll(`button[class*="ql-"i]:not([class*="ql-${toggleFormattingButtonName}"i])`);
+
+    buttons.forEach(element => {
+        element.disabled = true;
+    })
   
     pickers.forEach(element => {  
       element.addEventListener('mousedown', evt => evt.stopImmediatePropagation(), true);
       element.addEventListener('keydown', evt => evt.stopImmediatePropagation(), true);
     })
-  };
+};
 
 export function toggleFormatting (isToggleOpen, storedFormat, insertsRef) {
     if (isToggleOpen) {

@@ -1,11 +1,11 @@
 import React, { useState, useRef, useMemo, useLayoutEffect, useEffect } from 'react';
-import ReactQuill, { Quill } from 'react-quill';
-import { changeSpecificFonts, changeTextSize, clearPickersEvent, insertStar, toggleFormatting } from '../utils/customActions';
+import ReactQuill, {Quill} from 'react-quill';
+import { changeSpecificFonts, clearPickersEvent, insertStar, specificFontsLabels, toggleFormatting } from '../utils/customActions';
 import { register} from '../utils/register';
 import { setButtonTitle } from '../utils/toolbarButtonsTitle';
 import { bindings } from '../utils/bindButtons';
-import { fontsValues, formats, quillPlaceholderValue } from '../constants';
-import { CustomToolbar } from './ToolBar';
+import { fontSizes, formats, quillPlaceholderValue, toggleFormattingButtonName } from '../constants';
+import { setChangeSizeIcon, setToggleFormattingEye } from '../utils/setIcons';
 
 export const Editor = ({fonts, isToggleOpen, setIsToggleOpen}) => {
     const [value, setValue] = useState('');
@@ -15,7 +15,8 @@ export const Editor = ({fonts, isToggleOpen, setIsToggleOpen}) => {
 
     const quillRef = useRef();
     const insertsRef = useRef();
-
+    
+    setChangeSizeIcon('size');
     register(Quill);
 
     useEffect(() => {
@@ -25,7 +26,8 @@ export const Editor = ({fonts, isToggleOpen, setIsToggleOpen}) => {
         setTimeout(() => {
           clearPickersEvent(quillRef);
         }, 100);
-      }
+      };
+      setToggleFormattingEye(isToggleOpen, toggleFormattingButtonName)
     }, [isToggleOpen])
 
     useLayoutEffect(() => {
@@ -37,24 +39,33 @@ export const Editor = ({fonts, isToggleOpen, setIsToggleOpen}) => {
         if (isQuillVisibleSupport) {
             setIsQuillVisible(true);
             setIsQuillVisibleSupport(false);
+
         } else {
             setButtonTitle();
         }
     }, [isQuillVisibleSupport]);
 
+    console.log(quillRef.current?.getEditor())
+
     const modules = useMemo(() => ({
         toolbar: {
           handlers: { 
             insertStar: insertStar,
-            changeSize: changeTextSize,
-            specificFonts: changeSpecificFonts,
-            showHideFormatting:  function () {
+            toggleFormatting:  function () {
               toggleFormatting.call(this, isToggleOpen, {setStoredFormatting, storedFormatting}, insertsRef);
               
               setIsToggleOpen(!isToggleOpen);
             },
+            changeFonts: changeSpecificFonts
           },
-          container: '#toolbar',
+          container: [
+            ['bold', 'italic', 'underline', 'strike'],
+            [{ 'size': [...fontSizes] }],
+            [{ 'font': [...fonts, false] }],
+            [{'size': '20px'}],
+            [{ 'changeFonts': [...specificFontsLabels, false] }],
+            [toggleFormattingButtonName],
+          ],
         },
         keyboard: {
           bindings: bindings
@@ -62,9 +73,9 @@ export const Editor = ({fonts, isToggleOpen, setIsToggleOpen}) => {
         clipboard: {
           matchVisual: false,
         },
-    }), [isToggleOpen, storedFormatting]);
+    }), [isToggleOpen, fonts.length]);
 
-    const handleChange = (html, delta, source, editor) => {
+      const handleChange = (html, delta, source, editor) => {
       setValue(html);
 
       if (!storedFormatting || isToggleOpen) {
@@ -91,7 +102,6 @@ export const Editor = ({fonts, isToggleOpen, setIsToggleOpen}) => {
     return (
         <div className='p-3'>
           {isQuillVisible && <>
-              <CustomToolbar fonts={fonts} values={fontsValues} isToggleOpen={isToggleOpen} />
               <ReactQuill
                   ref={quillRef}
                   placeholder={quillPlaceholderValue}

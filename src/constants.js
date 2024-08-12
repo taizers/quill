@@ -5,6 +5,7 @@ export const defaultLimit = 5;
 export const defaultDelay = 500;
 export const chooseFontTitle = 'Choose Styles';
 export const quillPlaceholderValue = 'Type some text...';
+export const toggleFormattingButtonName = 'toggleFormatting';
 
 export const fontsValues = [
     {

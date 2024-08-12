@@ -55,10 +55,34 @@ html, body{
     margin-bottom: 1rem;
 }
 
-.custom-button {
-    color: black;
+.ql-snow button.ql-size svg path {
+    fill: black;
 }
 
-.custom-button:hover {
-    color: #06c;
+.ql-snow button.ql-size:hover svg path {
+    fill: #06c;
+}
+
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value]::before, 
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value]::before{
+    content: attr(data-value);
+}
+
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value]::before, 
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value]::before{
+    content: attr(data-value);
+}
+
+.ql-snow .ql-picker.ql-changeFonts .ql-picker-label::before {
+    padding-right: 20px;
+}
+
+.ql-snow .ql-picker.ql-changeFonts .ql-picker-label::before, 
+.ql-snow .ql-picker.ql-changeFonts .ql-picker-item::before{
+    content: 'default';
+}
+
+.ql-snow .ql-picker.ql-changeFonts .ql-picker-label[data-value]::before, 
+.ql-snow .ql-picker.ql-changeFonts .ql-picker-item[data-value]::before{
+    content: attr(data-value);
 }
