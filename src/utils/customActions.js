@@ -39,15 +39,15 @@ const defaultSpecificFontFormatting = (quill) => {
 
 export const specificFonts = [
     {
-        label: 'Красный, 14px',
+        label: 'Red, 14px',
         function: redSpecificFontFormatting,
     },
     {
-        label: 'Жирный, 10px',
+        label: 'Bold, 10px',
         function: boldSpecificFontFormatting,
     },
     {
-        label: 'Зелёный, наклонный, 12px, Roboto',
+        label: 'Green, Italic, 12px, Roboto',
         function: greenSpecificFontFormatting,
     },
     {

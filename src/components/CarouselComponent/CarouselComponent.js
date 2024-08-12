@@ -11,36 +11,57 @@ const CarouselComponent = () => {
     const [currentCarouselItemNumber, setCurrentCarouselItemNumber] = useState(defaultCurrentPage);
     const [limit, setLimit] = useState(defaultLimit);
     const [currentPage, setCurrentPage] = useState(defaultCurrentPage);
-    
-    useEffect(() => {
-        const startPosition = currentPage * limit;
-        const endPosition = currentPage === defaultCurrentPage ? limit - 1 : ((currentPage + 1) * limit) - 1;
 
-        ProductService.getProducts().then((data) => setProducts([...products, ...data.slice(startPosition, endPosition)]));
-    }, [currentPage]);
+    const getProducts = async(page) => {
+        const startPosition = page * limit;
+        const endPosition = startPosition + limit;
 
-    useEffect(() => {
-        if (
-            (Math.round((products.length - 2) - products.length * 0.25)) <= currentCarouselItemNumber && 
-            currentCarouselItemNumber !== defaultCurrentPage &&
-            currentPage < defaultMaxPage
-        )
-        {
-            setCurrentPage(currentPage + 1)
-        }
-    }, [currentCarouselItemNumber]);
+        const data = await ProductService.getProducts();
 
-    const fn = (prevCarouselPage, nextCarouselPage) => {
-        console.log(`prevCarouselPage: ${prevCarouselPage}, nextCarouselPage: ${nextCarouselPage}`);
-
+        return data.slice(startPosition, endPosition)
     }
 
-    const onCarouselChangePage = (evt) =>{
-        if (currentCarouselItemNumber !== evt.page) {
-            fn(currentCarouselItemNumber, evt.page);
+    useEffect(() => {
+        const startPosition = currentPage;
+        const endPosition = limit * 2;
+
+        ProductService.getProducts().then((data) => setProducts([...data.slice(startPosition, endPosition)]));
+    }, []);
+
+    const changeCarousel = async (prevCarouselPage, carouselPage) => {
+        if (carouselPage > prevCarouselPage && currentPage < defaultMaxPage) {
+          if (carouselPage <= products.length && carouselPage >= products.length-4) {
+            const previosProducts = products.slice(limit, products.length);
+
+            const newProducts = await getProducts(currentPage+2);
+            setProducts([...previosProducts, ...newProducts]);
+            
+            setCurrentCarouselItemNumber(carouselPage - limit);
+            setCurrentPage(currentPage+1);
+            return;
+          }
+        }
+      
+        if (carouselPage < prevCarouselPage && currentPage > defaultCurrentPage) {
+          if (carouselPage >= 0 && carouselPage < 2) {
+            const previosProducts = products.slice(0, -limit);
+
+            const newProducts = await getProducts(currentPage-1);
+            setProducts([...newProducts, ...previosProducts,]);
+      
+            setCurrentCarouselItemNumber(carouselPage + limit);
+            setCurrentPage(currentPage-1);
+            return;
+          }
         }
 
-        setCurrentCarouselItemNumber(evt.page)
+        setCurrentCarouselItemNumber(carouselPage)
+      };
+
+    const onCarouselChangePage = async (evt) =>{
+        if (currentCarouselItemNumber !== evt.page) {
+            await changeCarousel(currentCarouselItemNumber, evt.page);
+        }
     };
 
     return (

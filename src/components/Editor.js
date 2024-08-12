@@ -45,8 +45,6 @@ export const Editor = ({fonts, isToggleOpen, setIsToggleOpen}) => {
         }
     }, [isQuillVisibleSupport]);
 
-    console.log(quillRef.current?.getEditor())
-
     const modules = useMemo(() => ({
         toolbar: {
           handlers: { 
@@ -60,7 +58,7 @@ export const Editor = ({fonts, isToggleOpen, setIsToggleOpen}) => {
           },
           container: [
             ['bold', 'italic', 'underline', 'strike'],
-            [{ 'size': [...fontSizes] }],
+            [{ 'size': [...fontSizes, false] }],
             [{ 'font': [...fonts, false] }],
             [{'size': '20px'}],
             [{ 'changeFonts': [...specificFontsLabels, false] }],
